@@ -5,15 +5,22 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <ctime>
 
 int main() {
+    std::time_t now;
+
     system("clear");
-    int i = 0;
     while (true) {
         system("clear");
+        now = std::time(nullptr);
 
-        std::cout << ++i << std::endl;
+        char* timeStr = std::ctime(&now);
+
+        std::cout << timeStr << std::endl;
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
+
+    return 0;
 }
