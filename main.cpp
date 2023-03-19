@@ -3,7 +3,17 @@
 //
 
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 int main() {
-    std::cout << "balls" << std::endl;
+    system("clear");
+    int i = 0;
+    while (true) {
+        system("clear");
+
+        std::cout << ++i << std::endl;
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
 }
