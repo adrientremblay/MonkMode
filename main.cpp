@@ -6,11 +6,38 @@
 #include <chrono>
 #include <thread>
 #include <ctime>
+#include <fstream>
+#include <string>
+
+#define SAVE_FILE_NAME "data.txt"
+
+struct Monk {
+    std::string name;
+} monk;
+
+void save() {
+    std::ofstream outFile(SAVE_FILE_NAME);
+    if (outFile.is_open()) {
+        outFile << monk.name << std::endl;
+        outFile.close();
+    } else {
+        std::cerr << "Saving Failed!" << std::endl;
+    }
+}
 
 int main() {
-    std::time_t now;
+    // Load Save
+    std::ifstream inFile(SAVE_FILE_NAME);
+    if (inFile.is_open()) {
+        inFile >> monk.name;
+    } else {
+        monk.name = "jeff";
+    }
 
+    // Main Loop
     system("clear");
+    std::time_t now;
+    unsigned int save_counter = 0;
     while (true) {
         system("clear");
         now = std::time(nullptr);
@@ -18,6 +45,13 @@ int main() {
         char* timeStr = std::ctime(&now);
 
         std::cout << timeStr << std::endl;
+        std::cout << monk.name << std::endl;
+
+        save_counter++;
+        if (save_counter >= 5) {
+            save_counter = 0;
+            save();
+        }
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
