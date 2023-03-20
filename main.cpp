@@ -11,6 +11,7 @@
 #include <ncurses.h>
 #include <pthread.h>
 #include <vector>
+#include <iterator>
 
 #define SAVE_FILE_NAME "monk_save.txt"
 
@@ -20,6 +21,11 @@ struct Vice {
 
     Vice(const std::string& name, unsigned int damage) : name(name), damage(damage) {}
 };
+
+bool operator==(const Vice& lhs, const Vice& rhs) {
+    return lhs.name == rhs.name && lhs.damage == rhs.damage;
+}
+
 
 struct Monk {
     Monk() : vices() {};
@@ -56,11 +62,14 @@ void character_creation() {
 }
 
 void save() {
-    std::ofstream outFile(SAVE_FILE_NAME);
-    if (outFile.is_open()) {
-        outFile << monk.name << std::endl;
-        outFile << monk.birthday << std::endl;
-        outFile.close();
+    std::ofstream output_file(SAVE_FILE_NAME, std::ios::binary);
+    if (output_file.is_open()) {
+        output_file << monk.name << std::endl;
+        output_file << monk.birthday << std::endl;
+        std::ostream_iterator<Vice> output_iterator(output_file, "\n");
+        std::copy(std::begin(monk.vices), std::end(monk.vices), output_iterator);
+
+        output_file.close();
     } else {
         std::cerr << "Saving Failed!" << std::endl;
     }
@@ -126,10 +135,14 @@ void* game_thread_func(void* arg){
 
 int main() {
     // Load Save
-    std::ifstream inFile(SAVE_FILE_NAME);
-    if (inFile.is_open()) {
-        inFile >> monk.name;
-        inFile >> monk.birthday;
+    std::ifstream input_file(SAVE_FILE_NAME, std::ios::binary);
+    if (input_file.is_open()) {
+        input_file>> monk.name;
+        input_file >> monk.birthday;
+        int size;
+        input_file.read(reinterpret_cast<char*>(&size), sizeof(int));
+        input_file.read(reinterpret_cast<char*>(monk.vices.data()), size*sizeof(int));
+        input_file.close();
     } else {
         character_creation();
         save();
