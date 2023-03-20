@@ -60,8 +60,8 @@ void* game_thread_func(void* arg){
 
         char* timeStr = std::ctime(&now);
 
-        printw("Time: ");
-        printw(timeStr);
+        printw("Time: %s", timeStr);
+        printw("Monk Name: %s", monk.name.c_str());
 
         save_counter++;
         if (save_counter >= 5) {
