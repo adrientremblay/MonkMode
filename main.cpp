@@ -79,8 +79,7 @@ void draw_screen() {
     printw("Sanity: %g\n", sanity);
 
     for (Vice v : monk.vices) {
-        printw("weed");
-        //printw("Vice Name : %s", v.name.c_str());
+        printw("Vice Name : %s", v.name.c_str());
         //printw("Vice Damage : %s", v.damage);
     }
 
