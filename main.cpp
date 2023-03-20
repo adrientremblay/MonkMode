@@ -52,8 +52,8 @@ int main() {
 
         char* timeStr = std::ctime(&now);
 
-        std::cout << timeStr << std::endl;
-        std::cout << monk.name << std::endl;
+        std::cout << "Time: " << timeStr;
+        std::cout << "Monk Name: " << monk.name << std::endl;
 
         save_counter++;
         if (save_counter >= 5) {
