@@ -20,6 +20,7 @@
 
 WINDOW* text_win;
 WINDOW* monk_win;
+WINDOW* vices_win;
 
 const char* monk_img = "       ?5PP5YYY?^        \n"
                        "      J&5PPYY5#PB^       \n"
@@ -128,26 +129,34 @@ void draw_screen() {
     time(&now);
     char* timeStr = std::ctime(&now);
 
-    int row = 2;
+    int row = 1;
     int col = 1;
 
+    // Non Window Stuff
     mvprintw(0, 0, "Monk Mode v0.0");
 
     refresh();
 
+    // Info Window
     mvwprintw(text_win, row++, col, "Time: %s", timeStr);
     mvwprintw(text_win, row++, col, "Monk Name: %s\n", monk.name.c_str());
     double sanity = difftime(now, monk.birthday);
     mvwprintw(text_win, row++, col, "Sanity: %g\n", sanity);
 
-    for (Vice v : monk.vices) {
-        mvwprintw(text_win, row++, col, "Vice Name : %s\n", v.name.c_str());
-        mvwprintw(text_win, row++, col, "Vice Damage : %d\n", v.damage);
-    }
-
     box(text_win, 0, 0);
     wrefresh(text_win);
 
+    // Vices Window
+    row = 1;
+    for (Vice v : monk.vices) {
+        mvwprintw(vices_win, row++, col, "Vice Name : %s\n", v.name.c_str());
+        mvwprintw(vices_win, row++, col, "Vice Damage : %d\n", v.damage);
+    }
+
+    box(vices_win, 0, 0);
+    wrefresh(vices_win);
+
+    // Monk Window
     mvwprintw(monk_win, 1, 1, monk_img);
 
     box(monk_win, 0, 0);
@@ -159,8 +168,9 @@ void* input_thread_func(void* arg){
     noecho(); // Disable automatic echoing of input characters
     keypad(stdscr, true); // Enable function keys (e.g. arrow keys)
 
-    text_win = newwin(10, 50, 2, 1);
-    monk_win = newwin(34, 30, 2, 51);
+    text_win = newwin(10, 30, 2, 1);
+    vices_win = newwin(10, 30, 2, 31);
+    monk_win = newwin(34, 30, 2, 61);
 
     char c;
     while ((c = getchar()) != EOF) {
