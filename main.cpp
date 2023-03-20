@@ -18,6 +18,8 @@
 
 #define SAVE_FILE_NAME "monk_save.txt"
 
+WINDOW* win;
+
 struct Vice {
     std::string name;
     unsigned int damage;
@@ -36,7 +38,6 @@ struct Vice {
 bool operator==(const Vice& lhs, const Vice& rhs) {
     return lhs.name == rhs.name && lhs.damage == rhs.damage;
 }
-
 
 struct Monk {
     Monk() : vices() {};
@@ -94,6 +95,7 @@ void draw_screen() {
     time(&now);
     char* timeStr = std::ctime(&now);
 
+    /*
     int row = 2;
 
     mvprintw(row++, 2, "Time: %s", timeStr);
@@ -105,14 +107,19 @@ void draw_screen() {
         mvprintw(row++, 2, "Vice Name : %s\n", v.name.c_str());
         mvprintw(row++, 2, "Vice Damage : %d\n", v.damage);
     }
+     */
 
     refresh();
+    box(win, 0, 0);
+    wrefresh(win);
 }
 
 void* input_thread_func(void* arg){
     initscr(); // Initialize ncurses
     noecho(); // Disable automatic echoing of input characters
     keypad(stdscr, true); // Enable function keys (e.g. arrow keys)
+
+    win = newwin(10, 10, 10, 10);
 
     char c;
     while ((c = getchar()) != EOF) {
