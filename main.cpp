@@ -18,10 +18,12 @@ struct Vice {
     std::string name;
     unsigned int damage;
 
-    Vice(std::string name, unsigned int damage) : name(name), damage(damage) {}
+    Vice(const std::string& name, unsigned int damage) : name(name), damage(damage) {}
 };
 
 struct Monk {
+    Monk() : vices() {};
+
     std::string name;
     std::time_t birthday = std::time(nullptr);
     std::vector<Vice> vices;
@@ -34,15 +36,18 @@ void character_creation() {
 
     std::cout << "What are his vices? (d to stop)" << std::endl;
     for (int i = 0 ; i < 10 ; i++) {
-        std::cout << "Vice " << i+1;
+        std::cout << "Vice " << i+1 << ": ";
 
         std::string vice_name;
         std::getline(std::cin, vice_name);
-        if (vice_name == "d")
+        if (vice_name == "quit")
             break;
 
-        int vice_damage;
-        std::cin >> vice_damage;
+        std::cout << "Vice Damage: ";
+        std::string vice_dmg_str;
+        std::getline(std::cin, vice_dmg_str);
+        unsigned int vice_damage = 0;
+        vice_damage = std::stoi(vice_dmg_str);
 
         monk.vices.push_back(Vice(vice_name, vice_damage));
     }
@@ -70,8 +75,14 @@ void draw_screen() {
 
     printw("Time: %s", timeStr);
     printw("Monk Name: %s\n", monk.name.c_str());
-    double seconds = difftime(now, monk.birthday);
-    printw("Sanity: %g.0\n", seconds);
+    double sanity = difftime(now, monk.birthday);
+    printw("Sanity: %g\n", sanity);
+
+    for (Vice v : monk.vices) {
+        printw("weed");
+        //printw("Vice Name : %s", v.name.c_str());
+        //printw("Vice Damage : %s", v.damage);
+    }
 
     refresh();
 }
