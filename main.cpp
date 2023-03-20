@@ -158,7 +158,7 @@ void* input_thread_func(void* arg){
     keypad(stdscr, true); // Enable function keys (e.g. arrow keys)
 
     text_win = newwin(10, 50, 1, 1);
-    monk_win = newwin(71, 43, 1, 51);
+    monk_win = newwin(34, 30, 1, 51);
 
     char c;
     while ((c = getchar()) != EOF) {
