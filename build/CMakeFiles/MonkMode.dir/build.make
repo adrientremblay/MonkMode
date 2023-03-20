@@ -81,6 +81,7 @@ MonkMode: CMakeFiles/MonkMode.dir/main.cpp.o
 MonkMode: CMakeFiles/MonkMode.dir/build.make
 MonkMode: /usr/lib/x86_64-linux-gnu/libcurses.so
 MonkMode: /usr/lib/x86_64-linux-gnu/libform.so
+MonkMode: /usr/lib/x86_64-linux-gnu/libboost_serialization.so.1.71.0
 MonkMode: CMakeFiles/MonkMode.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/adrien/Projects/MonkMode/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable MonkMode"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/MonkMode.dir/link.txt --verbose=$(VERBOSE)

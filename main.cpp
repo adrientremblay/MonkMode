@@ -12,6 +12,9 @@
 #include <pthread.h>
 #include <vector>
 #include <iterator>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/serialization/vector.hpp>
 
 #define SAVE_FILE_NAME "monk_save.txt"
 
@@ -19,7 +22,15 @@ struct Vice {
     std::string name;
     unsigned int damage;
 
+    // add serialization method
+    template<class Archive>
+    void serialize(Archive & ar, const unsigned int version) {
+        ar & name;
+        ar & damage;
+    }
+
     Vice(const std::string& name, unsigned int damage) : name(name), damage(damage) {}
+    Vice() : name("<DEFAULT NAME>"), damage(0) {}
 };
 
 bool operator==(const Vice& lhs, const Vice& rhs) {
@@ -62,12 +73,13 @@ void character_creation() {
 }
 
 void save() {
-    std::ofstream output_file(SAVE_FILE_NAME, std::ios::binary);
+    std::ofstream output_file(SAVE_FILE_NAME);
     if (output_file.is_open()) {
-        output_file << monk.name << std::endl;
-        output_file << monk.birthday << std::endl;
-        std::ostream_iterator<Vice> output_iterator(output_file, "\n");
-        std::copy(std::begin(monk.vices), std::end(monk.vices), output_iterator);
+        boost::archive::text_oarchive oa(output_file);
+
+        oa << monk.name;
+        oa << monk.birthday;
+        oa << monk.vices;
 
         output_file.close();
     } else {
@@ -135,13 +147,14 @@ void* game_thread_func(void* arg){
 
 int main() {
     // Load Save
-    std::ifstream input_file(SAVE_FILE_NAME, std::ios::binary);
+    std::ifstream input_file(SAVE_FILE_NAME);
     if (input_file.is_open()) {
-        input_file>> monk.name;
-        input_file >> monk.birthday;
-        int size;
-        input_file.read(reinterpret_cast<char*>(&size), sizeof(int));
-        input_file.read(reinterpret_cast<char*>(monk.vices.data()), size*sizeof(int));
+        boost::archive::text_iarchive ia(input_file);
+
+        ia >> monk.name;
+        ia >> monk.birthday;
+        ia >> monk.vices;
+
         input_file.close();
     } else {
         character_creation();

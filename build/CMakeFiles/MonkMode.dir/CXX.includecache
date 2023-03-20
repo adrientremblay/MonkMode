@@ -25,4 +25,12 @@ pthread.h
 -
 vector
 -
+iterator
+-
+boost/archive/text_oarchive.hpp
+-
+boost/archive/text_iarchive.hpp
+-
+boost/serialization/vector.hpp
+-
 

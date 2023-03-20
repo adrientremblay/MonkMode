@@ -8,7 +8,10 @@ include_directories(${CURSES_INCLUDE_DIR})
 
 find_package(Threads REQUIRED)
 
+find_package(Boost REQUIRED COMPONENTS serialization)
+include_directories(${Boost_INCLUDE_DIRS})
+
 add_executable(MonkMode
         main.cpp)
 
-target_link_libraries(MonkMode ${CURSES_LIBRARIES} Threads::Threads)
+target_link_libraries(MonkMode ${CURSES_LIBRARIES} Threads::Threads  ${Boost_LIBRARIES})
