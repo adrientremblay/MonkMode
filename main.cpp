@@ -57,8 +57,13 @@ void* input_thread_func(void* arg){
 
     char c;
     while ((c = getchar()) != EOF) {
-        if (c == 's')
+        if (c == '1')
             monk.sanity++;
+        else if (c == 'q') {
+            save();
+            endwin();
+            exit(0);
+        }
 
         draw_screen();
     }
