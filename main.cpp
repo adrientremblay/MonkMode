@@ -9,11 +9,18 @@
 #include <fstream>
 #include <string>
 
-#define SAVE_FILE_NAME "data.txt"
+#define SAVE_FILE_NAME "monk_save.txt"
 
 struct Monk {
     std::string name;
+    int sanity = 0;
 } monk;
+
+void character_creation() {
+    std::cout << "A new monk has a arrived at the monastery..." << std::endl;
+    std::cout << "His name is Brother ";
+    std::getline(std::cin, monk.name);
+}
 
 void save() {
     std::ofstream outFile(SAVE_FILE_NAME);
@@ -31,7 +38,8 @@ int main() {
     if (inFile.is_open()) {
         inFile >> monk.name;
     } else {
-        monk.name = "jeff";
+        character_creation();
+        save();
     }
 
     // Main Loop
