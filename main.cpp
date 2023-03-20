@@ -36,8 +36,10 @@ void save() {
 
 void* input_thread_func(void* arg){
     initscr(); // Initialize ncurses
+    /*
     noecho(); // Disable automatic echoing of input characters
     keypad(stdscr, true); // Enable function keys (e.g. arrow keys)
+     */
 
     char c;
     while ((c = getchar()) != EOF) {
