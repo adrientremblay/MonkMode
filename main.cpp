@@ -124,14 +124,16 @@ void save() {
 }
 
 void draw_screen() {
-    refresh();
-
     time_t now;
     time(&now);
     char* timeStr = std::ctime(&now);
 
     int row = 2;
     int col = 1;
+
+    mvprintw(0, 0, "Monk Mode v0.0");
+
+    refresh();
 
     mvwprintw(text_win, row++, col, "Time: %s", timeStr);
     mvwprintw(text_win, row++, col, "Monk Name: %s\n", monk.name.c_str());
@@ -157,8 +159,8 @@ void* input_thread_func(void* arg){
     noecho(); // Disable automatic echoing of input characters
     keypad(stdscr, true); // Enable function keys (e.g. arrow keys)
 
-    text_win = newwin(10, 50, 1, 1);
-    monk_win = newwin(34, 30, 1, 51);
+    text_win = newwin(10, 50, 2, 1);
+    monk_win = newwin(34, 30, 2, 51);
 
     char c;
     while ((c = getchar()) != EOF) {
