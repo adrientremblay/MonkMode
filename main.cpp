@@ -28,10 +28,24 @@ void save() {
     std::ofstream outFile(SAVE_FILE_NAME);
     if (outFile.is_open()) {
         outFile << monk.name << std::endl;
+        outFile << monk.sanity << std::endl;
         outFile.close();
     } else {
         std::cerr << "Saving Failed!" << std::endl;
     }
+}
+
+void draw_screen() {
+    clear();
+
+    std::time_t now = std::time(nullptr);
+    char* timeStr = std::ctime(&now);
+
+    printw("Time: %s", timeStr);
+    printw("Monk Name: %s\n", monk.name.c_str());
+    printw("Sanity: %i\n", monk.sanity);
+
+    refresh();
 }
 
 void* input_thread_func(void* arg){
@@ -43,7 +57,10 @@ void* input_thread_func(void* arg){
 
     char c;
     while ((c = getchar()) != EOF) {
-        std::cout << "Input character: " << c << std::endl;
+        if (c == 's')
+            monk.sanity++;
+
+        draw_screen();
     }
 
     return NULL;
@@ -51,17 +68,10 @@ void* input_thread_func(void* arg){
 
 void* game_thread_func(void* arg){
     // Main Loop
-    std::time_t now;
     unsigned int save_counter = 0;
 
     while (true) {
-        clear();
-        now = std::time(nullptr);
-
-        char* timeStr = std::ctime(&now);
-
-        printw("Time: %s", timeStr);
-        printw("Monk Name: %s", monk.name.c_str());
+        draw_screen();
 
         save_counter++;
         if (save_counter >= 5) {
@@ -69,7 +79,6 @@ void* game_thread_func(void* arg){
             save();
         }
 
-        refresh();
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
@@ -81,6 +90,7 @@ int main() {
     std::ifstream inFile(SAVE_FILE_NAME);
     if (inFile.is_open()) {
         inFile >> monk.name;
+        inFile >> monk.sanity;
     } else {
         character_creation();
         save();
