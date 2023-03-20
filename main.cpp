@@ -10,23 +10,43 @@
 #include <string>
 #include <ncurses.h>
 #include <pthread.h>
+#include <vector>
 
 #define SAVE_FILE_NAME "monk_save.txt"
 
 struct Vice {
     std::string name;
     unsigned int damage;
+
+    Vice(std::string name, unsigned int damage) : name(name), damage(damage) {}
 };
 
 struct Monk {
     std::string name;
     std::time_t birthday = std::time(nullptr);
+    std::vector<Vice> vices;
 } monk;
 
 void character_creation() {
     std::cout << "A new monk has a arrived at the monastery..." << std::endl;
     std::cout << "His name is Brother ";
     std::getline(std::cin, monk.name);
+
+    std::cout << "What are his vices? (d to stop)" << std::endl;
+    for (int i = 0 ; i < 10 ; i++) {
+        std::cout << "Vice " << i+1;
+
+        std::string vice_name;
+        std::getline(std::cin, vice_name);
+        if (vice_name == "d")
+            break;
+
+        int vice_damage;
+        std::cin >> vice_damage;
+
+        monk.vices.push_back(Vice(vice_name, vice_damage));
+    }
+
     time(&monk.birthday);
 }
 
@@ -114,8 +134,6 @@ int main() {
 
     pthread_join(input_thread, NULL);
     pthread_join(game_thread, NULL);
-
-    std::cout << "penis" << std::endl;
 
     return 0;
 }
