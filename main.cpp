@@ -138,28 +138,29 @@ void draw_screen() {
     refresh();
 
     // Info Window
+    box(text_win, 0, 0);
+    mvwprintw(text_win, 0, 2, "INFO");
     mvwprintw(text_win, row++, col, "Time: %s", timeStr);
     mvwprintw(text_win, row++, col, "Monk Name: %s\n", monk.name.c_str());
     double sanity = difftime(now, monk.birthday);
     mvwprintw(text_win, row++, col, "Sanity: %g\n", sanity);
 
-    box(text_win, 0, 0);
     wrefresh(text_win);
 
     // Vices Window
+    box(vices_win, 0, 0);
     row = 1;
     for (Vice v : monk.vices) {
         mvwprintw(vices_win, row++, col, "Vice Name : %s\n", v.name.c_str());
         mvwprintw(vices_win, row++, col, "Vice Damage : %d\n", v.damage);
     }
 
-    box(vices_win, 0, 0);
     wrefresh(vices_win);
 
     // Monk Window
+    box(monk_win, 0, 0);
     mvwprintw(monk_win, 1, 1, monk_img);
 
-    box(monk_win, 0, 0);
     wrefresh(monk_win);
 }
 
