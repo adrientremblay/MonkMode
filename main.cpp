@@ -94,14 +94,16 @@ void draw_screen() {
     time(&now);
     char* timeStr = std::ctime(&now);
 
-    printw("Time: %s", timeStr);
-    printw("Monk Name: %s\n", monk.name.c_str());
+    int row = 2;
+
+    mvprintw(row++, 2, "Time: %s", timeStr);
+    mvprintw(row++, 2, "Monk Name: %s\n", monk.name.c_str());
     double sanity = difftime(now, monk.birthday);
-    printw("Sanity: %g\n", sanity);
+    mvprintw(row++, 2,"Sanity: %g\n", sanity);
 
     for (Vice v : monk.vices) {
-        printw("Vice Name : %s\n", v.name.c_str());
-        printw("Vice Damage : %d\n", v.damage);
+        mvprintw(row++, 2, "Vice Name : %s\n", v.name.c_str());
+        mvprintw(row++, 2, "Vice Damage : %d\n", v.damage);
     }
 
     refresh();
