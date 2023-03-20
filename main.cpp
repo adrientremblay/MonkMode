@@ -89,27 +89,25 @@ void save() {
 }
 
 void draw_screen() {
-    clear();
+    refresh();
 
     time_t now;
     time(&now);
     char* timeStr = std::ctime(&now);
 
-    /*
     int row = 2;
+    int col = 1;
 
-    mvprintw(row++, 2, "Time: %s", timeStr);
-    mvprintw(row++, 2, "Monk Name: %s\n", monk.name.c_str());
+    mvwprintw(win, row++, col, "Time: %s", timeStr);
+    mvwprintw(win, row++, col, "Monk Name: %s\n", monk.name.c_str());
     double sanity = difftime(now, monk.birthday);
-    mvprintw(row++, 2,"Sanity: %g\n", sanity);
+    mvwprintw(win, row++, col,"Sanity: %g\n", sanity);
 
     for (Vice v : monk.vices) {
-        mvprintw(row++, 2, "Vice Name : %s\n", v.name.c_str());
-        mvprintw(row++, 2, "Vice Damage : %d\n", v.damage);
+        mvwprintw(win, row++, col, "Vice Name : %s\n", v.name.c_str());
+        mvwprintw(win, row++, col, "Vice Damage : %d\n", v.damage);
     }
-     */
 
-    refresh();
     box(win, 0, 0);
     wrefresh(win);
 }
@@ -119,7 +117,7 @@ void* input_thread_func(void* arg){
     noecho(); // Disable automatic echoing of input characters
     keypad(stdscr, true); // Enable function keys (e.g. arrow keys)
 
-    win = newwin(10, 10, 10, 10);
+    win = newwin(10, 50, 4, 4);
 
     char c;
     while ((c = getchar()) != EOF) {
