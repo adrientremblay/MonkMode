@@ -51,18 +51,17 @@ void* input_thread_func(void* arg){
 
 void* game_thread_func(void* arg){
     // Main Loop
-    system("clear");
     std::time_t now;
     unsigned int save_counter = 0;
 
     while (true) {
-        system("clear");
+        clear();
         now = std::time(nullptr);
 
         char* timeStr = std::ctime(&now);
 
-        std::cout << "Time: " << timeStr;
-        std::cout << "Monk Name: " << monk.name << std::endl;
+        printw("Time: ");
+        printw(timeStr);
 
         save_counter++;
         if (save_counter >= 5) {
@@ -70,6 +69,7 @@ void* game_thread_func(void* arg){
             save();
         }
 
+        refresh();
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 
