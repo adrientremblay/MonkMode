@@ -18,7 +18,7 @@
 
 #define SAVE_FILE_NAME "monk_save.txt"
 
-WINDOW* text_win;
+WINDOW* info_win;
 WINDOW* monk_win;
 WINDOW* vices_win;
 
@@ -138,14 +138,14 @@ void draw_screen() {
     refresh();
 
     // Info Window
-    box(text_win, 0, 0);
-    mvwprintw(text_win, 0, 2, "INFO");
-    mvwprintw(text_win, row++, col, "Time: %s", timeStr);
-    mvwprintw(text_win, row++, col, "Monk Name: %s\n", monk.name.c_str());
+    mvwprintw(info_win, row++, col, "Time: %s", timeStr);
+    mvwprintw(info_win, row++, col, "Monk Name: %s\n", monk.name.c_str());
     double sanity = difftime(now, monk.birthday);
-    mvwprintw(text_win, row++, col, "Sanity: %g\n", sanity);
+    mvwprintw(info_win, row++, col, "Sanity: %g\n", sanity);
+    box(info_win, 0, 0);
+    mvwprintw(info_win, 0, 2, "INFO");
 
-    wrefresh(text_win);
+    wrefresh(info_win);
 
     // Vices Window
     box(vices_win, 0, 0);
@@ -169,9 +169,9 @@ void* input_thread_func(void* arg){
     noecho(); // Disable automatic echoing of input characters
     keypad(stdscr, true); // Enable function keys (e.g. arrow keys)
 
-    text_win = newwin(10, 30, 2, 1);
-    vices_win = newwin(10, 30, 2, 31);
-    monk_win = newwin(34, 30, 2, 61);
+    info_win = newwin(10, 32, 2, 1);
+    vices_win = newwin(10, 30, 2, 33);
+    monk_win = newwin(34, 30, 2, 63);
 
     char c;
     while ((c = getchar()) != EOF) {
