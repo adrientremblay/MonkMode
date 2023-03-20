@@ -13,22 +13,28 @@
 
 #define SAVE_FILE_NAME "monk_save.txt"
 
+struct Vice {
+    std::string name;
+    unsigned int damage;
+};
+
 struct Monk {
     std::string name;
-    int sanity = 0;
+    std::time_t birthday = std::time(nullptr);
 } monk;
 
 void character_creation() {
     std::cout << "A new monk has a arrived at the monastery..." << std::endl;
     std::cout << "His name is Brother ";
     std::getline(std::cin, monk.name);
+    time(&monk.birthday);
 }
 
 void save() {
     std::ofstream outFile(SAVE_FILE_NAME);
     if (outFile.is_open()) {
         outFile << monk.name << std::endl;
-        outFile << monk.sanity << std::endl;
+        outFile << monk.birthday << std::endl;
         outFile.close();
     } else {
         std::cerr << "Saving Failed!" << std::endl;
@@ -38,28 +44,26 @@ void save() {
 void draw_screen() {
     clear();
 
-    std::time_t now = std::time(nullptr);
+    time_t now;
+    time(&now);
     char* timeStr = std::ctime(&now);
 
     printw("Time: %s", timeStr);
     printw("Monk Name: %s\n", monk.name.c_str());
-    printw("Sanity: %i\n", monk.sanity);
+    double seconds = difftime(now, monk.birthday);
+    printw("Sanity: %g.0\n", seconds);
 
     refresh();
 }
 
 void* input_thread_func(void* arg){
     initscr(); // Initialize ncurses
-    /*
     noecho(); // Disable automatic echoing of input characters
     keypad(stdscr, true); // Enable function keys (e.g. arrow keys)
-     */
 
     char c;
     while ((c = getchar()) != EOF) {
-        if (c == '1')
-            monk.sanity++;
-        else if (c == 'q') {
+        if (c == 'q') {
             save();
             endwin();
             exit(0);
@@ -95,7 +99,7 @@ int main() {
     std::ifstream inFile(SAVE_FILE_NAME);
     if (inFile.is_open()) {
         inFile >> monk.name;
-        inFile >> monk.sanity;
+        inFile >> monk.birthday;
     } else {
         character_creation();
         save();
