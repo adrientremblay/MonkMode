@@ -100,8 +100,8 @@ void draw_screen() {
     printw("Sanity: %g\n", sanity);
 
     for (Vice v : monk.vices) {
-        printw("Vice Name : %s", v.name.c_str());
-        //printw("Vice Damage : %s", v.damage);
+        printw("Vice Name : %s\n", v.name.c_str());
+        printw("Vice Damage : %d\n", v.damage);
     }
 
     refresh();
