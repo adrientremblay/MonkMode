@@ -11,11 +11,11 @@
 #include <ncurses.h>
 #include <pthread.h>
 #include <vector>
-#include <iterator>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include "monks.h"
+#include <math.h>
 
 #define SAVE_FILE_NAME "monk_save.txt"
 
@@ -25,7 +25,7 @@ WINDOW* vices_win;
 
 struct Vice {
     std::string name;
-    unsigned int damage;
+    double damage;
 
     // add serialization method
     template<class Archive>
@@ -69,7 +69,7 @@ void character_creation() {
         std::string vice_dmg_str;
         std::getline(std::cin, vice_dmg_str);
         unsigned int vice_damage = 0;
-        vice_damage = std::stoi(vice_dmg_str);
+        vice_damage = std::stod(vice_dmg_str);
 
         monk.vices.push_back(Vice(vice_name, vice_damage));
     }
@@ -110,7 +110,7 @@ void draw_screen() {
     // Info Window
     mvwprintw(info_win, row++, col, "Time: %s", timeStr);
     mvwprintw(info_win, row++, col, "Monk Name: %s\n", monk.name.c_str());
-    double sanity = difftime(now, monk.birthday) - monk.damage_taken;
+    double sanity = floor(difftime(now, monk.birthday) / 60) - monk.damage_taken;
     mvwprintw(info_win, row++, col, "Sanity: %g\n", sanity);
     box(info_win, 0, 0);
     mvwprintw(info_win, 0, 2, "INFO");
@@ -121,7 +121,7 @@ void draw_screen() {
     row = 1;
     int vice_num = 1;
     for (Vice v : monk.vices) {
-        mvwprintw(vices_win, row++, col, "[%d] %s - %ddmg\n", vice_num++, v.name.c_str(), v.damage);
+        mvwprintw(vices_win, row++, col, "[%d] %s - %gdmg\n", vice_num++, v.name.c_str(), v.damage);
     }
     box(vices_win, 0, 0);
     mvwprintw(vices_win, 0, 2, "VICES");
