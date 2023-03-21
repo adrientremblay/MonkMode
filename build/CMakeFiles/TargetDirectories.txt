@@ -1,3 +1,0 @@
-/home/adrien/Projects/MonkMode/build/CMakeFiles/rebuild_cache.dir
-/home/adrien/Projects/MonkMode/build/CMakeFiles/edit_cache.dir
-/home/adrien/Projects/MonkMode/build/CMakeFiles/MonkMode.dir
