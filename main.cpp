@@ -49,6 +49,7 @@ struct Monk {
     std::time_t birthday = std::time(nullptr);
     std::vector<Vice> vices;
     unsigned int damage_taken;
+    bool alive;
 } monk;
 
 void character_creation() {
@@ -76,6 +77,7 @@ void character_creation() {
 
     time(&monk.birthday);
     monk.damage_taken = 0;
+    monk.alive = true;
 }
 
 void save() {
@@ -87,6 +89,7 @@ void save() {
         oa << monk.birthday;
         oa << monk.vices;
         oa << monk.damage_taken;
+        oa << monk.alive;
 
         output_file.close();
     } else {
@@ -94,23 +97,39 @@ void save() {
     }
 }
 
+double calculate_sanity() {
+    time_t now;
+    time(&now);
+    return floor(difftime(now, monk.birthday) / 60) - monk.damage_taken;
+}
+
 void draw_screen() {
     time_t now;
     time(&now);
-    char* timeStr = std::ctime(&now);
 
-    int row = 1;
-    int col = 1;
+    double sanity = calculate_sanity();
 
     // Non Window Stuff
     mvprintw(1, 2, "Monk Mode v0.0");
 
+    if (!monk.alive) {
+        clear();
+        wclear(info_win);
+        wclear(vices_win);
+        wclear(monk_win);
+        mvprintw(4, 4, "The Monk is dead...");
+        refresh();
+        return;
+    }
+
     refresh();
 
     // Info Window
+    int row = 1;
+    int col = 1;
+    char* timeStr = std::ctime(&now);
     mvwprintw(info_win, row++, col, "Time: %s", timeStr);
     mvwprintw(info_win, row++, col, "Monk Name: %s\n", monk.name.c_str());
-    double sanity = floor(difftime(now, monk.birthday) / 60) - monk.damage_taken;
     mvwprintw(info_win, row++, col, "Sanity: %g\n", sanity);
     box(info_win, 0, 0);
     mvwprintw(info_win, 0, 2, "INFO");
@@ -156,6 +175,10 @@ void* input_thread_func(void* arg){
             if (monk.vices.size() >= vice_index + 1) {
                 Vice vice = monk.vices.at(vice_index);
                 monk.damage_taken += vice.damage;
+
+                if (calculate_sanity() < 0)
+                    monk.alive = false;
+
                 save();
             }
         }
@@ -195,6 +218,7 @@ int main() {
         ia >> monk.birthday;
         ia >> monk.vices;
         ia >> monk.damage_taken;
+        ia >> monk.alive;
 
         input_file.close();
     } else {
