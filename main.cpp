@@ -22,39 +22,39 @@ WINDOW* info_win;
 WINDOW* monk_win;
 WINDOW* vices_win;
 
-const char* monk_img = "       ?5PP5YYY?^        \n"
-                       "      J&5PPYY5#PB^       \n"
-                       "     ?&#GGPYYY5B#.       \n"
-                       "   .Y&#&BBGYYYB@!        \n"
-                       "  :P#&#&#GPPG&@@7        \n"
-                       " :GGB55PG#&B#&&&@?       \n"
-                       " J#5YJY5YYPG&@&#@J       \n"
-                       "5BP5PBBGY5YYPB#G##J.     \n"
-                       "!GBPG&@&GG5YY5BPPGBB^    \n"
-                       " :PYY5G@@@@&#BB#GB##:    \n"
-                       " :BYY5GBB#@@&#&#BBBBG~   \n"
-                       " .#BYYYYY5##55PBYYB#&#:  \n"
-                       "  7#BP5YY5BP#BBGYYP###:  \n"
-                       "   .G&GPPBGG#G55YP5G&G   \n"
-                       "   !&@&&#BBGGBBBBBGG5^   \n"
-                       "  ^#&#&&&&&@@&&##&^.     \n"
-                       "  ~#@##&GBG&&&GGP&7      \n"
-                       "  7#&#B&GGG&&#PGPB5      \n"
-                       "  PBB&G#GP5P&BGGGG#.     \n"
-                       " .#GG@BGP5YYGBGGGG@!     \n"
-                       " ~@5P@&G5YYYG#PG55@G     \n"
-                       " ?@PYB@#PYYY##5YY5@&:    \n"
-                       " Y@PY5&@BYYY#&5YYP@@~    \n"
-                       " 5@PYPG&@5Y5#&PYYP@@7    \n"
-                       " P@PPGGP#BY5#BPYYY#@5    \n"
-                       " B@BGGYYY5YPGGPYYYG@B    \n"
-                       ".#@BG5YYYYYPG#PYYYP@&:   \n"
-                       ":&@BGYYYYY5GB&PYYYP@@7   \n"
-                       "~@@BGYYYYYPG#@GYYYP@@&^  \n"
-                       "!@@#GP5Y5GGG&@GYYYP@@@#^ \n"
-                       "J@@&GGGGGGG&@&GYY5#@@@BJ \n"
-                       "^~Y@&&&&&&@@@&BB#BB#BY   \n"
-                       "  :PGB##&&&@@@&&#? .     ";
+const char* monk_img = "         ^?YYY5PP5?       \n"
+                       "        ^BP#5YYPP5&J      \n"
+                       "        .#B5YYYPGG#&?     \n"
+                       "         !@BYYYGBB&#&Y.   \n"
+                       "         7@@&GPPG#&#&#P:  \n"
+                       "        ?@&&&#B&#GP55BGG: \n"
+                       "        J@#&@&GPYY5YJY5#J \n"
+                       "      .J##G#BPYY5YGBBP5PB5\n"
+                       "     ^BBGPPB5YY5GG&@&GPBG!\n"
+                       "     :##BG#BB#&@@@@G5YYP: \n"
+                       "    ~GBBBB#&#&@@#BBG5YYB: \n"
+                       "   :#&BBYYBP55B#5YYYYYB#. \n"
+                       "   :###PYYGBB#PB5YY5PB#7  \n"
+                       "    G&G5PY55G#GGBPPG&G.   \n"
+                       "    ^5GGBBBBBGGBB#&&@&!   \n"
+                       "      .^&##&&@@&&&&&#&#^  \n"
+                       "       7&PGG&&&GBG&##@#~  \n"
+                       "       5BPGP#&&GGG&B#&#7  \n"
+                       "      .#GGGGB&P5PG#G&BBP  \n"
+                       "      !@GGGGBGYY5PGB@GG#. \n"
+                       "      G@55GP#GYYY5G&@P5@~ \n"
+                       "     :&@5YY5##YYYP#@BYP@? \n"
+                       "     ~@@PYY5&#YYYB@&5YP@Y \n"
+                       "     7@@PYYP&#5Y5@&GPYP@5 \n"
+                       "     5@#YYYPB#5YB#PGGPP@P \n"
+                       "     B@GYYYPGGPY5YYYGGB@B \n"
+                       "    :&@PYYYP#GPYYYYY5GB@#.\n"
+                       "    7@@PYYYP&BG5YYYYYGB@&:\n"
+                       "   ^&@@PYYYG@#GPYYYYYGB@@~\n"
+                       "  ^#@@@PYYYG@&GGG5Y5PG#@@!\n"
+                       "  JB@@@#5YYG&@&GGGGGGG&@@J\n"
+                       "    YB#BB#BB&@@@&&&&&&@Y~^\n"
+                       "      . ?#&&@@@&&&##BGP:  ";
 
 struct Vice {
     std::string name;
@@ -133,7 +133,7 @@ void draw_screen() {
     int col = 1;
 
     // Non Window Stuff
-    mvprintw(0, 0, "Monk Mode v0.0");
+    mvprintw(1, 2, "Monk Mode v0.0");
 
     refresh();
 
@@ -148,18 +148,19 @@ void draw_screen() {
     wrefresh(info_win);
 
     // Vices Window
-    box(vices_win, 0, 0);
     row = 1;
     for (Vice v : monk.vices) {
         mvwprintw(vices_win, row++, col, "Vice Name : %s\n", v.name.c_str());
         mvwprintw(vices_win, row++, col, "Vice Damage : %d\n", v.damage);
     }
-
+    box(vices_win, 0, 0);
+    mvwprintw(vices_win, 0, 2, "VICES");
     wrefresh(vices_win);
 
     // Monk Window
+    mvwprintw(monk_win, 1, 0, monk_img);
     box(monk_win, 0, 0);
-    mvwprintw(monk_win, 1, 1, monk_img);
+    mvwprintw(monk_win, 0, 2, "MONK");
 
     wrefresh(monk_win);
 }
@@ -169,9 +170,9 @@ void* input_thread_func(void* arg){
     noecho(); // Disable automatic echoing of input characters
     keypad(stdscr, true); // Enable function keys (e.g. arrow keys)
 
-    info_win = newwin(10, 32, 2, 1);
-    vices_win = newwin(10, 30, 2, 33);
-    monk_win = newwin(34, 30, 2, 63);
+    info_win = newwin(10, 32, 3, 1);
+    vices_win = newwin(10, 30, 3, 33);
+    monk_win = newwin(35, 30, 3, 63);
 
     char c;
     while ((c = getchar()) != EOF) {
