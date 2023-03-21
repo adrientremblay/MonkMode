@@ -81,6 +81,7 @@ struct Monk {
     std::string name;
     std::time_t birthday = std::time(nullptr);
     std::vector<Vice> vices;
+    unsigned int damage_taken;
 } monk;
 
 void character_creation() {
@@ -107,6 +108,7 @@ void character_creation() {
     }
 
     time(&monk.birthday);
+    monk.damage_taken = 0;
 }
 
 void save() {
@@ -117,6 +119,7 @@ void save() {
         oa << monk.name;
         oa << monk.birthday;
         oa << monk.vices;
+        oa << monk.damage_taken;
 
         output_file.close();
     } else {
@@ -140,7 +143,7 @@ void draw_screen() {
     // Info Window
     mvwprintw(info_win, row++, col, "Time: %s", timeStr);
     mvwprintw(info_win, row++, col, "Monk Name: %s\n", monk.name.c_str());
-    double sanity = difftime(now, monk.birthday);
+    double sanity = difftime(now, monk.birthday) - monk.damage_taken;
     mvwprintw(info_win, row++, col, "Sanity: %g\n", sanity);
     box(info_win, 0, 0);
     mvwprintw(info_win, 0, 2, "INFO");
@@ -180,6 +183,13 @@ void* input_thread_func(void* arg){
             save();
             endwin();
             exit(0);
+        } else if (c >= '1' && c <= '9') {
+            int vice_index = c - 49;
+            if (monk.vices.size() >= vice_index + 1) {
+                Vice vice = monk.vices.at(vice_index);
+                monk.damage_taken += vice.damage;
+                save();
+            }
         }
 
         draw_screen();
@@ -216,6 +226,7 @@ int main() {
         ia >> monk.name;
         ia >> monk.birthday;
         ia >> monk.vices;
+        ia >> monk.damage_taken;
 
         input_file.close();
     } else {
