@@ -128,6 +128,7 @@ void draw_screen() {
     wrefresh(vices_win);
 
     // Monk Window
+    wclear(monk_win);
     mvwprintw(monk_win, 1, 0, sanity >= 50 ? monk_img : kneeling_monk);
     box(monk_win, 0, 0);
     mvwprintw(monk_win, 0, 2, "MONK");
@@ -140,8 +141,8 @@ void* input_thread_func(void* arg){
     noecho(); // Disable automatic echoing of input characters
     keypad(stdscr, true); // Enable function keys (e.g. arrow keys)
 
-    info_win = newwin(10, 32, 3, 1);
-    vices_win = newwin(10, 30, 3, 33);
+    info_win = newwin(35, 32, 3, 1);
+    vices_win = newwin(35, 30, 3, 33);
     monk_win = newwin(35, 30, 3, 63);
 
     char c;
