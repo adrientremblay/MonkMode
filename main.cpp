@@ -110,7 +110,7 @@ void draw_screen() {
     double sanity = calculate_sanity();
 
     // Non Window Stuff
-    mvprintw(1, 2, "Monk Mode v0.0");
+    mvprintw(1, 2, "Monk Mode v0.1");
 
     if (!monk.alive) {
         clear();
