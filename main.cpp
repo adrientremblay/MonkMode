@@ -149,9 +149,9 @@ void draw_screen() {
 
     // Vices Window
     row = 1;
+    int vice_num = 1;
     for (Vice v : monk.vices) {
-        mvwprintw(vices_win, row++, col, "Vice Name : %s\n", v.name.c_str());
-        mvwprintw(vices_win, row++, col, "Vice Damage : %d\n", v.damage);
+        mvwprintw(vices_win, row++, col, "[%d] %s - %ddmg\n", vice_num++, v.name.c_str(), v.damage);
     }
     box(vices_win, 0, 0);
     mvwprintw(vices_win, 0, 2, "VICES");
