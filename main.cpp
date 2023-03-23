@@ -129,8 +129,13 @@ void draw_screen() {
     int col = 1;
     char* timeStr = std::ctime(&now);
     mvwprintw(info_win, row++, col, "Time: %s", timeStr);
+
     mvwprintw(info_win, row++, col, "Monk Name: %s\n", monk.name.c_str());
+
     mvwprintw(info_win, row++, col, "Sanity: %g\n", sanity);
+
+    long time_alive = difftime(now, monk.birthday) / 60;
+    mvwprintw(info_win, row++, col, "Time Alive: %ds\n", time_alive);
     box(info_win, 0, 0);
     mvwprintw(info_win, 0, 2, "INFO");
 
