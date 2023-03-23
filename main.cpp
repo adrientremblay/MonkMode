@@ -97,7 +97,7 @@ void save() {
     }
 }
 
-double calculate_sanity() {
+double calculate_karma() {
     time_t now;
     time(&now);
     return floor(difftime(now, monk.birthday) / 60) - monk.damage_taken;
@@ -107,7 +107,7 @@ void draw_screen() {
     time_t now;
     time(&now);
 
-    double sanity = calculate_sanity();
+    double karma = calculate_karma();
 
     // Non Window Stuff
     mvprintw(1, 2, "Monk Mode v0.1");
@@ -132,7 +132,7 @@ void draw_screen() {
 
     mvwprintw(info_win, row++, col, "Monk Name: %s\n", monk.name.c_str());
 
-    mvwprintw(info_win, row++, col, "Sanity: %g\n", sanity);
+    mvwprintw(info_win, row++, col, "Karma: %g\n", karma);
 
     long time_alive = difftime(now, monk.birthday) / 60;
     mvwprintw(info_win, row++, col, "Time Alive: %ds\n", time_alive);
@@ -153,7 +153,7 @@ void draw_screen() {
 
     // Monk Window
     wclear(monk_win);
-    mvwprintw(monk_win, 1, 0, sanity >= 50 ? monk_img : kneeling_monk);
+    mvwprintw(monk_win, 1, 0, karma >= 50 ? monk_img : kneeling_monk);
     box(monk_win, 0, 0);
     mvwprintw(monk_win, 0, 2, "MONK");
 
@@ -181,7 +181,7 @@ void* input_thread_func(void* arg){
                 Vice vice = monk.vices.at(vice_index);
                 monk.damage_taken += vice.damage;
 
-                if (calculate_sanity() < 0)
+                if (calculate_karma() < 0)
                     monk.alive = false;
 
                 save();
